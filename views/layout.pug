@@ -6,7 +6,6 @@ html(lang="en")
 	head
 		meta(charset="utf-8")
 		base(href=config.baseUrl)
-		meta(name="csrf-token", content=csrfToken)
 		meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no")
 
 		meta(name="description" content="Open-source, easy-to-use, educational Bitcoin explorer whose only dependency is your Bitcoin Core node.")
@@ -62,11 +61,6 @@ html(lang="en")
 							img.header-image(src=assetUrl(coinConfig.logoUrlsByNetwork[activeBlockchain]), alt="logo")
 						else
 							img.header-image(src=assetUrl("./img/network-mainnet/logo.svg"), alt="logo")
-
-						if (coinConfig.siteTitlesByNetwork && coinConfig.siteTitlesByNetwork[activeBlockchain])
-							span.fw-light #{coinConfig.siteTitlesByNetwork[activeBlockchain]}
-						else
-							span.fw-light Bitcoin Explorer
 
 				if (false && config.demoSite)
 					- var networkNameMap = {"main": "Mainnet", "test": "Testnet", "signet": "Signet"};
@@ -136,7 +130,7 @@ html(lang="en")
 								.dropdown-menu.dropdown-menu-end.shadow(aria-labelledby="navbarDropdown")
 									span.dropdown-header Display Currency
 
-									- var items = ["BTC", "sat"];
+									- var items = ["VTO", "sat"];
 									if (config.queryExchangeRates && global.exchangeRates)
 										- items.push("local");
 
@@ -205,7 +199,6 @@ html(lang="en")
 							
 
 				form.form-inline.d-none.d-lg-inline(method="post", action="./search", style="width: 325px;")
-					input(type="hidden", name="_csrf", value=csrfToken)
 					.input-group
 						input.form-control(type="text", name="query", placeholder="block height/hash, txid, address", value=(query), autocapitalize="off", autocomplete="off", autocorrect="off", spellcheck="false")
 						
@@ -213,7 +206,6 @@ html(lang="en")
 							i.bi-search
 
 				form.form-inline.d-lg-none.w-100.mt-2.mt-md-0(method="post", action="./search")
-					input(type="hidden", name="_csrf", value=csrfToken)
 					.input-group
 						input.form-control(type="text", name="query", placeholder="height/hash/txid...", value=(query), autocapitalize="off", autocomplete="off", autocorrect="off", spellcheck="false")
 						
@@ -245,92 +237,7 @@ html(lang="en")
 					block content
 
 				div(style="margin-bottom: 30px;")
-
-		footer.footer.border-top.border-primary.bg-header-footer.pt-3.pb-1.px-3.text-white(style="border-width: 5px !important;")
-			.container
-				if (!crawlerBot && global.rpcConnected)
-					.mb-4.mx-6
-						iframe(id="quoteIframe", title="A Bitcoin Quote of the Day", src="./snippet/quote/random", onload="iframeLoaded('quoteIframe');", scrolling="no", height="0", style="width: 100%;")
-
-					hr
-
-				
-				.row.mt-4.mb-6
-					.col-lg-3
-						.mb-4
-							h6 Project
-
-							.ms-2
-								a.footer-link(href="https://github.com/janoside/btc-rpc-explorer") github.com/janoside/btc-rpc-explorer
-									
-								if (global.sourcecodeProjectMetadata)
-									div.mt-2
-										a.btn.btn-primary.btn-sm.me-3.mb-1.text-decoration-none(href="https://github.com/janoside/btc-rpc-explorer")
-											i.bi-star-fill.text-warning.me-2
-											span.badge.bg-white.text-dark #{global.sourcecodeProjectMetadata.stargazers_count}
-
-										a.btn.btn-primary.btn-sm.me-3.mb-1.text-decoration-none(href="https://github.com/janoside/btc-rpc-explorer/fork")
-											i.bi-bezier2.me-2
-											span.badge.bg-white.text-dark #{global.sourcecodeProjectMetadata.forks_count}
-
-					.col-lg-3
-						.mb-4
-							h6 App Details
-
-							.ms-2
-								span version: #{global.appVersion}
-								if (sourcecodeVersion)
-									br
-									span commit: 
-										a.footer-link(href=`https://github.com/janoside/btc-rpc-explorer/commit/${sourcecodeVersion}`) #{sourcecodeVersion}
-								
-								br
-								span released: #{sourcecodeDate}
-								span(style="font-size: 0.9em;")  (
-									a.footer-link(href="./changelog") changelog
-									span )
-
-					.col-lg-3
-						if (config.demoSite)
-							.mb-4
-								h6 Public Demos
-
-								.ms-2
-									if (coinConfig.demoSiteUrlsByNetwork && coinConfig.demoSiteUrlsByNetwork.main)
-										a.footer-link(href=coinConfig.demoSiteUrlsByNetwork.main) #{coinConfig.demoSiteUrlsByNetwork.main}
-									else
-										a.footer-link(href="https://bitcoinexplorer.org") https://bitcoinexplorer.org
-
-									br
-
-									a.footer-link(href="http://btcexpz7xlwrqknqw6p3bok6shf73qtkd6zxct4x4qta2ktvh7ntprad.onion", title="Tor v3 Hidden Service", data-bs-toggle="tooltip") btcexp….onion
-									span.ms-1 (tor v3)
-									+copyTextButton("http://btcexpz7xlwrqknqw6p3bok6shf73qtkd6zxct4x4qta2ktvh7ntprad.onion")
-									
-									div.mt-2
-										- var demoSites = ["main", "test", "signet"];
-										
-										each demoSite in demoSites
-											a.me-2(href=coinConfig.demoSiteUrlsByNetwork[demoSite], title=coinConfig.siteTitlesByNetwork[demoSite], data-bs-toggle="tooltip")
-												img(src=assetUrl(coinConfig.logoUrlsByNetwork[demoSite]), alt=coinConfig.siteTitlesByNetwork[demoSite], style="width: 40px; height: 40px;")
-
-					.col-lg-3
-						.mb-4
-							h6 Links
-
-							.ms-2
-								span(style="font-size: 1.5rem;")
-									if (global.sourcecodeProjectMetadata)
-										a.text-white.mb-1.me-3(href="https://github.com/janoside/btc-rpc-explorer", title="View source code", data-bs-toggle="tooltip")
-											i.bi-git
-
-									a.text-danger.mb-1.me-3(href="https://donate.bitcoinexplorer.org", target="_blank", title="Support this project with a donation", data-bs-toggle="tooltip")
-										i.bi-heart-fill.text-danger
-
-									a.text-white.mb-1(href="https://twitter.com/BitcoinExplorer", target="_blank", title="Follow @BitcoinExplorer on Twitter", data-bs-toggle="tooltip")
-										i.bi-twitter.text-twitter
-								
-								
+							
 
 		+sharedScriptTags
 		

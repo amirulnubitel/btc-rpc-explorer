@@ -79,7 +79,7 @@ module.exports = {
 		regtest: "#777",
 	},
 	siteTitlesByNetwork: {
-		main: "Vertocoin Explorer",
+		main: "Main Explorer",
 		test: "Vertocoin Testnet Explorer",
 		regtest: "Vertocoin Regtest Explorer",
 		signet: "Vertocoin Signet Explorer",

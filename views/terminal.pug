@@ -24,8 +24,6 @@ block content
 
 block endOfBody
 	script.
-		var csrfToken = $('meta[name=csrf-token]').attr('content');
-
 		$(document).ready(function() {
 			$("#terminal-form").submit(function(e) {
 				e.preventDefault();
@@ -34,7 +32,6 @@ block endOfBody
 
 				var postData = {};
 				postData.cmd = cmd;
-				postData._csrf = csrfToken;
 				
 				$.post(
 					"./terminal",
